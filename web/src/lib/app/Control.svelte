@@ -16,7 +16,7 @@
     let result = null
 
     async function publish (msg) {
-		const res = await fetch('http://192.168.1.179:1323/save', {
+		const res = await fetch('http://localhost:1323/save', {
 			method: 'POST',
             headers: {
                 'Accept': 'application/json',

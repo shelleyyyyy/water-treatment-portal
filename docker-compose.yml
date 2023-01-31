@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  admin-ui:
+    build: ./web/.
+    expose:
+      - "5173"
+  yahoo-finance:
+    build: ./echo/.
+    expose:
+      - "1323"
