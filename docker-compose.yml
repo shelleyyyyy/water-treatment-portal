@@ -4,7 +4,11 @@ services:
     build: ./web/.
     expose:
       - "5173"
-  yahoo-finance:
+  echo:
     build: ./echo/.
     expose:
       - "1323"
+  pb:
+    build: ./pb/.
+    expose:
+      - "8080"
