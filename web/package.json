@@ -27,8 +27,6 @@
 	"type": "module",
 	"dependencies": {
 		"daisyui": "^2.49.0",
-		"mqtt": "^4.3.7",
-    	"rollup": "^2.70.1",
 		"pocketbase": "^0.10.1"
 	}
 }
