@@ -11,4 +11,4 @@ services:
   pb:
     build: ./pb/.
     ports:
-      - 8090:8080
+      - 8080:8080
