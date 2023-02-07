@@ -27,6 +27,8 @@
 	"type": "module",
 	"dependencies": {
 		"daisyui": "^2.49.0",
-		"pocketbase": "^0.10.1"
+		"net": "^1.0.2",
+		"pocketbase": "^0.10.1",
+		"u8-mqtt": "^0.3.1"
 	}
 }

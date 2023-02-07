@@ -13,6 +13,8 @@ import (
 
 func main() {
 
+	go StartSubs()
+
 	e := echo.New()
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
@@ -21,7 +23,7 @@ func main() {
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
-	e.POST("/save", save)
+	e.POST("/publishMessage", publishMessage)
 	e.Logger.Fatal(e.Start(":1323"))
 }
 
@@ -30,13 +32,13 @@ type Msg struct {
 	Message string `json:"message"`
 }
 
-func save(c echo.Context) error {
+func publishMessage(c echo.Context) error {
 	u := new(Msg)
 	if err := c.Bind(u); err != nil {
 		return err
 	}
 
-	startMqtt("192.168.1.179", u.Topic, u.Message)
+	startMqtt("192.168.1.72", u.Topic, u.Message)
 
 	return c.JSON(http.StatusCreated, "success")
 }

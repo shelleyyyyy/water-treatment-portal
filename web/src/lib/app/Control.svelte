@@ -1,9 +1,11 @@
 <script>
 	import Switch from "./Switch.svelte";
+    import Button from "./Button.svelte";
 
     export let type;
     export let topic;
     export let options;
+    export let title;
 
     // const publish = async (msg) => {
     //     const response = await fetch("http://localhost:1323/save");
@@ -16,7 +18,7 @@
     let result = null
 
     async function publish (msg) {
-		const res = await fetch('http://192.168.1.179:1323/save', {
+		const res = await fetch('http://localhost:1323/publishMessage', {
 			method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -37,6 +39,16 @@
 
 <div class="p-5 bg-secondary rounded-lg flex ">
     {#if type == "switch"}
-        <Switch publish={publish} options={options}/>
+        <div>
+            <h1 class="font-bold text-center pb-2">{title}</h1>
+            <Switch publish={publish} options={options}/>
+        </div>
+    {/if}
+
+    {#if type == "button"}
+        <div>
+            <h1 class="font-bold text-center pb-2">{title}</h1>
+            <Button publish={publish} options={options}/>
+        </div>
     {/if}
 </div>

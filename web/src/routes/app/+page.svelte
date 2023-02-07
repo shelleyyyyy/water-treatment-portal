@@ -2,18 +2,13 @@
 
     import SectorCard from "../../lib/app/SectorCard.svelte";
     import { onMount } from 'svelte';
+    import { pb, currentUser } from "$lib/app/pocketbase.js"
 
-    import PocketBase from 'pocketbase';
-
-    const pb = new PocketBase('http://192.168.1.179:8080');
-
-    // you can also fetch all records at once via getFullList
     let records = []
     onMount(async () => {
-        records = await pb.collection('sectors').getFullList(200 /* batch size */, {
-            sort: '-created',
-        });
+        records = await pb.collection('sectors').getFullList(200)
     })
+
 
 </script>
 

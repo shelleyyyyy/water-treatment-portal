@@ -1,13 +1,14 @@
 <script>
     import { goto } from '$app/navigation';
   
-    import PocketBase from 'pocketbase';
-
-    const pb = new PocketBase('http://192.168.1.179:8080');
+    import { pb, currentUser } from "$lib/app/pocketbase.js"
+    
     const logout = () => {
         pb.authStore.clear()
         goto("/login")
     }
+
+    console.log(currentUser.username, "********")
 
 </script>
 
