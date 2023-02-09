@@ -38,7 +38,7 @@ func publishMessage(c echo.Context) error {
 		return err
 	}
 
-	startMqtt("192.168.1.72", u.Topic, u.Message)
+	startMqtt("localhost", u.Topic, u.Message)
 
 	return c.JSON(http.StatusCreated, "success")
 }

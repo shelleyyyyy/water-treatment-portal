@@ -76,7 +76,7 @@ func StartSubs() {
 		fmt.Printf("Connection Lost: %s\n", err.Error())
 	}
 
-	var broker = "tcp://192.168.1.72:1883"
+	var broker = "tcp://localhost:1883"
 	options := mqtt.NewClientOptions()
 	options.AddBroker(broker)
 	options.SetClientID("go_mqtt_example")
@@ -115,7 +115,7 @@ func StartSubs() {
 }
 
 func UpdateData(collName string, recordID string, jsonData []byte) error {
-	httpposturl := fmt.Sprintf("http://192.168.1.72:8080/api/collections/%s/records/%s", collName, recordID)
+	httpposturl := fmt.Sprintf("http://localhost:8080/api/collections/%s/records/%s", collName, recordID)
 
 	request, error := http.NewRequest("PATCH", httpposturl, bytes.NewBuffer(jsonData))
 	request.Header.Set("Content-Type", "application/json; charset=UTF-8")
@@ -148,7 +148,7 @@ type Item struct {
 }
 
 func GetData(collID string) (error, ResponseData) {
-	requestURL := fmt.Sprintf("http://192.168.1.72:8080/api/collections/%s/records", collID)
+	requestURL := fmt.Sprintf("http://localhost:8080/api/collections/%s/records", collID)
 	res, err := http.Get(requestURL)
 
 	var jsonData ResponseData
