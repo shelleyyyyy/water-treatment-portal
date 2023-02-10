@@ -76,10 +76,12 @@ func StartSubs() {
 		fmt.Printf("Connection Lost: %s\n", err.Error())
 	}
 
-	var broker = "tcp://localhost:1883"
+	var broker = "tcp://iot.cs.vt.edu:1883"
 	options := mqtt.NewClientOptions()
 	options.AddBroker(broker)
 	options.SetClientID("go_mqtt_example")
+	options.SetUsername("icat")
+	options.SetPassword("icat2GO")
 	options.SetDefaultPublishHandler(messagePubHandler)
 	options.OnConnect = connectHandler
 	options.OnConnectionLost = connectionLostHandler

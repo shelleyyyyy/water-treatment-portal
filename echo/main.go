@@ -38,7 +38,7 @@ func publishMessage(c echo.Context) error {
 		return err
 	}
 
-	startMqtt("localhost", u.Topic, u.Message)
+	startMqtt("iot.cs.vt.edu", u.Topic, u.Message)
 
 	return c.JSON(http.StatusCreated, "success")
 }
@@ -49,8 +49,8 @@ func startMqtt(broker string, topic string, msg string) {
 	opts := mqtt.NewClientOptions()
 	opts.AddBroker(fmt.Sprintf("tcp://%s:%d", broker, port))
 	opts.SetClientID("go_mqtt_client")
-	opts.SetUsername("emqx")
-	opts.SetPassword("public")
+	opts.SetUsername("icat")
+	opts.SetPassword("icat2GO")
 	opts.SetDefaultPublishHandler(messagePubHandler)
 	opts.OnConnect = connectHandler
 	opts.OnConnectionLost = connectLostHandler
