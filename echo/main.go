@@ -1,19 +1,64 @@
 package main
 
 import (
+	"log"
 	"net/http"
+	"os"
 
 	"fmt"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 
+	"github.com/joho/godotenv"
+
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
 
+type Config struct {
+	Broker         string
+	BrokerPort     string
+	BrokerPass     string
+	BrokerUser     string
+	Pocketbase     string
+	PocketbasePort string
+}
+
+// func LoadConfig(path string) (config Config, err error) {
+// 	viper.AddConfigPath(path)
+// 	viper.SetConfigName("app")
+// 	viper.SetConfigType("env")
+
+// 	viper.AutomaticEnv()
+
+// 	err = viper.ReadInConfig()
+// 	if err != nil {
+// 		return
+// 	}
+
+// 	err = viper.Unmarshal(&config)
+// 	return
+// }
+
 func main() {
 
-	go StartSubs()
+	err := godotenv.Load("app.env")
+	if err != nil {
+		log.Fatalf("Some error occured. Err: %s", err)
+	}
+
+	broker := os.Getenv("BROKER")
+	brokerPort := os.Getenv("BROKER_PORT")
+	brokerPass := os.Getenv("BROKER_PASS")
+	brokerUser := os.Getenv("BROKER_USER")
+	pocketbase := os.Getenv("POCKETBASE")
+	pocketbasePort := os.Getenv("POCKETBASE_PORT")
+
+	fig := Config{broker, brokerPort, brokerPass, brokerUser, pocketbase, pocketbasePort}
+
+	fmt.Println(fig)
+
+	go fig.StartSubs()
 
 	e := echo.New()
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
@@ -23,7 +68,7 @@ func main() {
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
-	e.POST("/publishMessage", publishMessage)
+	e.POST("/publishMessage", fig.publishMessage)
 	e.Logger.Fatal(e.Start(":1323"))
 }
 
@@ -32,25 +77,24 @@ type Msg struct {
 	Message string `json:"message"`
 }
 
-func publishMessage(c echo.Context) error {
+func (fig Config) publishMessage(c echo.Context) error {
 	u := new(Msg)
 	if err := c.Bind(u); err != nil {
 		return err
 	}
 
-	startMqtt("iot.cs.vt.edu", u.Topic, u.Message)
+	fig.startMqtt(u.Topic, u.Message)
 
 	return c.JSON(http.StatusCreated, "success")
 }
 
-func startMqtt(broker string, topic string, msg string) {
+func (fig Config) startMqtt(topic string, msg string) {
 	// var broker = "broker.emqx.io"
-	var port = 1883
 	opts := mqtt.NewClientOptions()
-	opts.AddBroker(fmt.Sprintf("tcp://%s:%d", broker, port))
+	opts.AddBroker(fmt.Sprintf("tcp://%s:%s", fig.Broker, fig.BrokerPort))
 	opts.SetClientID("go_mqtt_client")
-	opts.SetUsername("icat")
-	opts.SetPassword("icat2GO")
+	opts.SetUsername(fig.BrokerUser)
+	opts.SetPassword(fig.BrokerPass)
 	opts.SetDefaultPublishHandler(messagePubHandler)
 	opts.OnConnect = connectHandler
 	opts.OnConnectionLost = connectLostHandler

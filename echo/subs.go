@@ -23,9 +23,11 @@ type UpdateDataStruct struct {
 	Topic float64 `json:"topic"`
 }
 
-func StartSubs() {
+func (fig Config) StartSubs() {
 
-	_, subs := GetData("subsciptions")
+	fmt.Println(fig.Broker)
+
+	_, subs := fig.GetData("subsciptions")
 
 	// fmt.Println(subs.Items)
 
@@ -63,7 +65,7 @@ func StartSubs() {
 					return
 				}
 
-				UpdateData("subsciptions", x.Id, marsh)
+				fig.UpdateData("subsciptions", x.Id, marsh)
 			}
 		}
 	}
@@ -76,12 +78,12 @@ func StartSubs() {
 		fmt.Printf("Connection Lost: %s\n", err.Error())
 	}
 
-	var broker = "tcp://iot.cs.vt.edu:1883"
+	var broker = "tcp://" + fig.Broker + ":" + fig.BrokerPort
 	options := mqtt.NewClientOptions()
 	options.AddBroker(broker)
 	options.SetClientID("go_mqtt_example")
-	options.SetUsername("icat")
-	options.SetPassword("icat2GO")
+	options.SetUsername(fig.BrokerUser)
+	options.SetPassword(fig.BrokerPass)
 	options.SetDefaultPublishHandler(messagePubHandler)
 	options.OnConnect = connectHandler
 	options.OnConnectionLost = connectionLostHandler
@@ -116,8 +118,8 @@ func StartSubs() {
 	client.Disconnect(100)
 }
 
-func UpdateData(collName string, recordID string, jsonData []byte) error {
-	httpposturl := fmt.Sprintf("http://localhost:8080/api/collections/%s/records/%s", collName, recordID)
+func (fig Config) UpdateData(collName string, recordID string, jsonData []byte) error {
+	httpposturl := fmt.Sprintf("http://%s:%s/api/collections/%s/records/%s", fig.Pocketbase, fig.PocketbasePort, collName, recordID)
 
 	request, error := http.NewRequest("PATCH", httpposturl, bytes.NewBuffer(jsonData))
 	request.Header.Set("Content-Type", "application/json; charset=UTF-8")
@@ -149,8 +151,8 @@ type Item struct {
 	Topic string
 }
 
-func GetData(collID string) (error, ResponseData) {
-	requestURL := fmt.Sprintf("http://localhost:8080/api/collections/%s/records", collID)
+func (fig Config) GetData(collID string) (error, ResponseData) {
+	requestURL := fmt.Sprintf("http://%s:%s/api/collections/%s/records", fig.Pocketbase, fig.PocketbasePort, collID)
 	res, err := http.Get(requestURL)
 
 	var jsonData ResponseData

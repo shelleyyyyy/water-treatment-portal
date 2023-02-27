@@ -1,4 +1,6 @@
 <script>
+    import { PUBLIC_ECHO, PUBLIC_ECHO_PORT } from '$env/static/public'
+
 	import Switch from "./Switch.svelte";
     import Button from "./Button.svelte";
 
@@ -18,7 +20,7 @@
     let result = null
 
     async function publish (msg) {
-		const res = await fetch('http://localhost:1323/publishMessage', {
+		const res = await fetch(`http://${PUBLIC_ECHO}:${PUBLIC_ECHO_PORT}/publishMessage`, {
 			method: 'POST',
             headers: {
                 'Accept': 'application/json',
