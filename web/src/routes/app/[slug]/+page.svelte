@@ -54,29 +54,33 @@
                 <div class="card-actions pt-5 justify-start grid gap-3 grid-cols-1">
                     <!-- {console.log(r.controls[0])} -->
 
-                    <div class="font-bold text-center text-2xl">
-                        Controls   
-                    </div>
+                    {#if r.controls.length > 0}
+                        <div class="font-bold text-center text-2xl">
+                            Controls   
+                        </div>
+                    
 
-                   <div class="flex gap-1 flex-wrap">
-                        {#each r.controls as c}
-                            <Control type={c.type} topic={c.topic} options={c.options} title={c.title}/>
-                        {/each}
-                   </div>
-
+                        <div class="flex gap-1 flex-wrap">
+                            {#each r.controls as c}
+                                <Control type={c.type} topic={c.topic} options={c.options} title={c.title}/>
+                            {/each}
+                        </div>
+                   {/if}
                     <!-- {#each r.expand as }
-                        
+
                     {/each} -->
 
-                    <div class="font-bold text-center text-2xl">
-                        Subscriptions   
-                    </div>
+                    {#if r.subs.length > 0}
+                        <div class="font-bold text-center text-2xl">
+                            Subscriptions   
+                        </div>
 
-                    <div class="flex gap-1 flex-wrap">
-                        {#each r.subs as s}
-                            <SubCard id={s}/>
-                        {/each}
-                    </div>
+                        <div class="flex gap-1 flex-wrap">
+                            {#each r.subs as s}
+                                <SubCard id={s}/>
+                            {/each}
+                        </div>
+                    {/if}
 
                     <!-- {#each r.contorls as s}
                         <Control type={"switch"}/>
