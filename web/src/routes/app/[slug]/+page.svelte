@@ -1,92 +1,95 @@
 <script>
 	import SectorCard from '$lib/app/SectorCard.svelte';
-    /** @type {import('./$types').PageData} */
-    export let data;
-    import { onMount } from 'svelte';
-    import Control from '$lib/app/Control.svelte';
-    import SubCard from '$lib/app/SubCard.svelte';
-    import { pb } from "$lib/app/pocketbase.js"
+	/** @type {import('./$types').PageData} */
+	export let data;
+	import { onMount } from 'svelte';
+	import Control from '$lib/app/Control.svelte';
+	import SubCard from '$lib/app/SubCard.svelte';
+	import { pb } from '$lib/app/pocketbase.js';
+	import TempGraph from '$lib/app/TempGraph.svelte';
 
-    let records = []
-    let sector = {}
-    let subs = []
+	let records = [];
+	let sector = {};
+	let subs = [];
 
-    onMount(async () => {
-        sector = await pb.collection('sectors').getOne(data.title);
+	onMount(async () => {
+		sector = await pb.collection('sectors').getOne(data.title);
+		var res = await pb.collection('devices').getFullList(200, {
+			expand: 'sector',
+			expane: 'subs'
+		});
 
-        var res = await pb.collection('devices').getFullList(200, {
-            expand: 'sector',
-            expane: 'subs'
-        });
-        
-        console.log(res)
+		console.log(res);
 
-        var forRecords = []
+		var forRecords = [];
 
-        res.forEach(element => {
-            if (element.expand.sector.id == data.title) {
-                forRecords.push(element)
-            }
-        });
+		res.forEach((element) => {
+			if (element.expand.sector.id == data.title) {
+				forRecords.push(element);
+			}
+		});
 
-        records = forRecords
+		records = forRecords;
 
-        // var resSubs = await pb.collection('subsciptions').getFullList(200, {
-        //     expand: 'device'
-        // })
-        
-        // console.log(resSubs)
+		// var resSubs = await pb.collection('subsciptions').getFullList(200, {
+		//     expand: 'device'
+		// })
 
-        // console.log(records)
+		// console.log(resSubs)
 
-    })
-
+		// console.log(records)
+	});
 </script>
 
 <h1 class="text-xl font-bold p-5 px-10">{sector.title}</h1>
-
 <div class="p-5 flex gap-5 ">
-    {#each records as r}
-        <div class="card bg-primary text-primary-content">
-            <div class="card-body">
-                <h2 class="card-title text-3xl">{r.title}</h2>
-                <p>{r.description}</p>
-                <div class="card-actions pt-5 justify-start grid gap-3 grid-cols-1">
-                    <!-- {console.log(r.controls[0])} -->
+	{#each records as r}
+		<div class="card bg-primary text-primary-content">
+			<div class="card-body">
+				<h2 class="card-title text-3xl">{r.title}</h2>
+				<!-- The button to open modal -->
+				<label for="my-modal-4" class="btn" style="text-transform: uppercase;">Live Graph</label>
 
-                    {#if r.controls.length > 0}
-                        <div class="font-bold text-center text-2xl">
-                            Controls   
-                        </div>
-                    
+				<!-- Put this part before </body> tag -->
+				<input type="checkbox" id="my-modal-4" class="modal-toggle" />
+				<label for="my-modal-4" class="modal cursor-pointer">
+					<label class="modal-box relative w-full" for="" style="width: 900px; height: 400px;">
+						<h3 class="text-lg font-bold">Temperature</h3>
+						<TempGraph />
+					</label>
+				</label>
+				<p>{r.description}</p>
+				<div class="card-actions pt-5 justify-start grid gap-3 grid-cols-1">
+					<!-- {console.log(r.controls[0])} -->
 
-                        <div class="flex gap-1 flex-wrap">
-                            {#each r.controls as c}
-                                <Control type={c.type} topic={c.topic} options={c.options} title={c.title}/>
-                            {/each}
-                        </div>
-                   {/if}
-                    <!-- {#each r.expand as }
+					{#if r.controls.length > 0}
+						<div class="font-bold text-center text-2xl">Controls</div>
+
+						<div class="flex gap-1 flex-wrap">
+							{#each r.controls as c}
+								<Control type={c.type} topic={c.topic} options={c.options} title={c.title} />
+							{/each}
+						</div>
+					{/if}
+					<!-- {#each r.expand as }
 
                     {/each} -->
 
-                    {#if r.subs.length > 0}
-                        <div class="font-bold text-center text-2xl">
-                            Subscriptions   
-                        </div>
+					{#if r.subs.length > 0}
+						<div class="font-bold text-center text-2xl">Subscriptions</div>
 
-                        <div class="flex gap-1 flex-wrap">
-                            {#each r.subs as s}
-                                <SubCard id={s}/>
-                            {/each}
-                        </div>
-                    {/if}
+						<div class="flex gap-1 flex-wrap">
+							{#each r.subs as s}
+								<SubCard id={s} />
+							{/each}
+						</div>
+					{/if}
 
-                    <!-- {#each r.contorls as s}
+					<!-- {#each r.contorls as s}
                         <Control type={"switch"}/>
                     {/each} -->
-                </div>
-            </div>
-        </div>
-    {/each}
+				</div>
+			</div>
+		</div>
+	{/each}
 </div>
