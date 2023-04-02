@@ -1,4 +1,6 @@
 <script>
+	// @ts-nocheck
+
 	import SectorCard from '$lib/app/SectorCard.svelte';
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -6,7 +8,7 @@
 	import Control from '$lib/app/Control.svelte';
 	import SubCard from '$lib/app/SubCard.svelte';
 	import { pb } from '$lib/app/pocketbase.js';
-	import TempGraph from '$lib/app/TempGraph.svelte';
+	import Graph from '$lib/app/Graph.svelte';
 
 	let records = [];
 	let sector = {};
@@ -54,8 +56,8 @@
 				<input type="checkbox" id="my-modal-4" class="modal-toggle" />
 				<label for="my-modal-4" class="modal cursor-pointer">
 					<label class="modal-box relative w-full" for="" style="width: 900px; height: 400px;">
-						<h3 class="text-lg font-bold">Temperature</h3>
-						<TempGraph />
+						<h3 class="text-lg font-bold">Live Data</h3>
+						<Graph />
 					</label>
 				</label>
 				<p>{r.description}</p>
