@@ -1,53 +1,132 @@
 <script>
 	import { pb } from '$lib/app/pocketbase.js';
 	import { onMount } from 'svelte';
-	import Chart from 'chart.js/auto';
+	import ApexCharts from 'apexcharts';
 
-	let chart;
-	let chartData = {
-		labels: [],
-		datasets: [
-			{
-				label: 'Data',
-				borderColor: 'blue',
-				data: []
-			}
-		]
-	};
+	export let id;
+	let title = '';
+	let chart = null;
+	let data = [];
+	const XAXISRANGE = 10 * 1000;
 
 	onMount(async () => {
-		// const myCollection = await pb.collection('devices');
-		// const documents = await myCollection.get();
+		var res = await pb.collection('subsciptions').getOne(id);
+		title = res.title;
 
-		const ctx = document.getElementById('chart').getContext('2d');
+		const getNewSeries = async (baseval, yrange) => {
+			const subscription = await pb.collection('subsciptions').getOne(id);
+			const value = subscription.value;
+			const newDate = baseval + XAXISRANGE;
+			data.push({
+				x: newDate,
+				y: value
+			});
+		};
 
-		// const subscription = await pb.subscribe('my_data_source');
+		await getNewSeries(new Date().getTime(), {
+			min: 10,
+			max: 90
+		});
 
-		// subscription.on('message', (message) => {
-		// 	const { timestamp, value } = message.data;
-		// 	chartData.labels.push(timestamp);
-		// 	chartData.datasets[0].data.push(value);
-
-		// 	if (chart) {
-		// 		chart.update();
-		// 	}
-		// });
-
-		chart = new Chart(ctx, {
-			type: 'line',
-			data: chartData,
-			options: {
-				scales: {
-					y: {
-						suggestedMin: 0,
-						suggestedMax: 100
+		const options = {
+			series: [
+				{
+					data: data.slice()
+				}
+			],
+			chart: {
+				id: `realtime-${id}`,
+				height: 350,
+				type: 'line',
+				animations: {
+					enabled: true,
+					easing: 'linear',
+					dynamicAnimation: {
+						speed: 1000
+					}
+				},
+				toolbar: {
+					show: false
+				},
+				zoom: {
+					enabled: false
+				}
+			},
+			dataLabels: {
+				enabled: false
+			},
+			stroke: {
+				curve: 'smooth'
+			},
+			title: {
+				text: `Real-time graph for ${title}`,
+				style: {
+					color: '#000'
+				}
+			},
+			markers: {
+				size: 0
+			},
+			xaxis: {
+				type: 'datetime',
+				range: XAXISRANGE,
+				labels: {
+					datetimeUTC: false,
+					datetimeFormatter: {
+						hour: 'HH:mm:ss',
+						timeZone: 'America/New_York'
+					}
+				},
+				tooltip: {
+					enabled: false
+				},
+				title: {
+					text: 'Time',
+					style: {
+						color: '#000',
+						fontSize: '14px'
 					}
 				}
+			},
+			yaxis: {
+				max: 400,
+				min: 0, // adjust the max value to accommodate the new data range
+				tickAmount: 15,
+				title: {
+					text: 'Subscription Data',
+					style: {
+						color: '#000',
+						fontSize: '14px'
+					}
+				}
+			},
+			legend: {
+				show: false
 			}
+		};
+
+		const chartElement = document.getElementById(`chart-${id}`);
+		chart = new ApexCharts(chartElement, options);
+		chart.render();
+
+		pb.collection('subsciptions').subscribe(id, function (e) {
+			getNewSeries(new Date().getTime(), {
+				min: 10,
+				max: 100 // adjust the max value to accommodate the new data range
+			}).then(() => {
+				chart.updateSeries([
+					{
+						data: data
+					}
+				]);
+			});
+			console.log(e.record.value);
 		});
 	});
 </script>
 
-<div>
-	<canvas id="chart" />
+<div class="p-5 bg-secondary rounded-lg">
+	<div class="p-3 bg-white">
+		<div id="chart-{id}" />
+	</div>
 </div>

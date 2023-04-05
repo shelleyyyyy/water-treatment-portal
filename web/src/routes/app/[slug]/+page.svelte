@@ -13,8 +13,18 @@
 	let records = [];
 	let sector = {};
 	let subs = [];
+	let isConnected = false;
 
 	onMount(async () => {
+		try {
+			// Attempt to connect to Pocketbase
+			await pb.collection('subsciptions').getFullList(200, { sort: '-created' });
+			isConnected = true;
+		} catch (err) {
+			console.error('Failed to connect to Pocketbase:', err.message);
+			isConnected = false;
+		}
+
 		sector = await pb.collection('sectors').getOne(data.title);
 		var res = await pb.collection('devices').getFullList(200, {
 			expand: 'sector',
@@ -44,52 +54,38 @@
 </script>
 
 <h1 class="text-xl font-bold p-5 px-10">{sector.title}</h1>
-<div class="p-5 flex gap-5 ">
+<div class="p-5 flex gap-5">
 	{#each records as r}
 		<div class="card bg-primary text-primary-content">
 			<div class="card-body">
 				<h2 class="card-title text-3xl">{r.title}</h2>
-				<!-- The button to open modal -->
-				<label for="my-modal-4" class="btn" style="text-transform: uppercase;">Live Graph</label>
+				{#if r.subs.length > 0}
+					{#each r.subs as s}
+						<div class="card">
+							<Graph id={s} />
+						</div>
+					{/each}
+				{/if}
 
-				<!-- Put this part before </body> tag -->
-				<input type="checkbox" id="my-modal-4" class="modal-toggle" />
-				<label for="my-modal-4" class="modal cursor-pointer">
-					<label class="modal-box relative w-full" for="" style="width: 900px; height: 400px;">
-						<h3 class="text-lg font-bold">Live Data</h3>
-						<Graph />
-					</label>
-				</label>
 				<p>{r.description}</p>
 				<div class="card-actions pt-5 justify-start grid gap-3 grid-cols-1">
-					<!-- {console.log(r.controls[0])} -->
-
 					{#if r.controls.length > 0}
 						<div class="font-bold text-center text-2xl">Controls</div>
-
 						<div class="flex gap-1 flex-wrap">
 							{#each r.controls as c}
 								<Control type={c.type} topic={c.topic} options={c.options} title={c.title} />
 							{/each}
 						</div>
 					{/if}
-					<!-- {#each r.expand as }
-
-                    {/each} -->
 
 					{#if r.subs.length > 0}
 						<div class="font-bold text-center text-2xl">Subscriptions</div>
-
 						<div class="flex gap-1 flex-wrap">
 							{#each r.subs as s}
 								<SubCard id={s} />
 							{/each}
 						</div>
 					{/if}
-
-					<!-- {#each r.contorls as s}
-                        <Control type={"switch"}/>
-                    {/each} -->
 				</div>
 			</div>
 		</div>
