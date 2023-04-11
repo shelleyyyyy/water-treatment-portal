@@ -1,35 +1,30 @@
 <script>
+	import { pb } from '$lib/app/pocketbase.js';
+	import { onMount } from 'svelte';
 
-    import { pb } from "$lib/app/pocketbase.js"
-	import { onMount } from "svelte"
+	export let id;
 
-    export let id;
+	$: record = 'tmp';
 
-    $: record = "tmp"
+	var title = '';
 
-    var title = ""
+	onMount(async () => {
+		var res = await pb.collection('subsciptions').getOne(id);
+		console.log(res);
+		title = res.title;
+		record = res.value;
 
-    onMount(async () => {
-
-        var res = await pb.collection('subsciptions').getOne(id)
-        console.log(res)
-        title = res.title
-        record = res.value
-
-        pb.collection('subsciptions').subscribe(id, function (e) {
-            record = e.record.value
-        });
-    })
-
+		pb.collection('subsciptions').subscribe(id, function (e) {
+			record = e.record.value;
+		});
+	});
 </script>
 
-
-
 <div class="p-5 bg-secondary rounded-lg">
-    <div class="font-bold text-center">
-        {title}
-    </div>
-    <div class="text-center p-3">
-        {record}
-    </div>
+	<div class="font-bold text-center">
+		{title}
+	</div>
+	<div class="text-center p-3">
+		{record}
+	</div>
 </div>
