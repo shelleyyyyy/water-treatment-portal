@@ -54,7 +54,7 @@
 </script>
 
 <h1 class="text-xl font-bold p-5 px-10">{sector.title}</h1>
-<div class="p-5 flex gap-5">
+<div class="p-5 flex flex-wrap justify-center gap-5">
 	{#each records as r}
 		<div class="card bg-primary text-primary-content">
 			<div class="card-body">
