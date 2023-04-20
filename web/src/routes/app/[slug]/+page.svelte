@@ -9,6 +9,7 @@
 	import SubCard from '$lib/app/SubCard.svelte';
 	import { pb } from '$lib/app/pocketbase.js';
 	import Graph from '$lib/app/Graph.svelte';
+	import Chart from '$lib/app/Chart.svelte';
 
 	let records = [];
 	let sector = {};
@@ -62,7 +63,8 @@
 				{#if r.subs.length > 0}
 					{#each r.subs as s}
 						<div class="card">
-							<Graph id={s} />
+							<!-- <Graph id={s} /> -->
+							<Chart id={s}/>
 						</div>
 					{/each}
 				{/if}

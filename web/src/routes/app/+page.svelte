@@ -2,7 +2,7 @@
 	import SectorCard from '../../lib/app/SectorCard.svelte';
 	import { onMount } from 'svelte';
 	import { pb, currentUser } from '$lib/app/pocketbase.js';
-	import Chart from 'chart.js/auto';
+	// import Chart from 'chart.js/auto';
 
 	let records = [];
 	onMount(async () => {
