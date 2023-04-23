@@ -3,7 +3,7 @@ services:
   admin-ui:
     build: ./web/.
     ports:
-      - 5173:5173
+      - 80:80
   echo:
     build: ./echo/.
     ports:
@@ -11,4 +11,4 @@ services:
   pb:
     build: ./pb/.
     ports:
-      - 8080:8080
+      - 8090:8090
