@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="black">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width" />
+		<meta http-equiv="content-security-policy" content="">
+		<link href="../_app/immutable/assets/_layout.368b811b.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.8f793ba0.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/index.2e02abf8.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/singletons.21823fd3.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/index.16ee5c7c.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.1306f8a3.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/_layout.svelte.042fd73e.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/navigation.52161cbd.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/pocketbase.1bcd3499.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/_layout.js.ce8ddad8.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/_layout.b28356b5.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app-layout.svelte.6ac5ef3e.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app-page.svelte.633f16c6.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">
+
+
+<main><div class="navbar bg-base-100"><div class="navbar-start"><a href="/app" class="btn btn-ghost normal-case text-xl">Water Treatment Portal</a></div>
+    <div class="navbar-end"><button class="btn">Logout</button></div></div>
+
+<main><h1 class="font-bold text-xl px-10 py-2">Sectors</h1>
+
+<div class="flex flex-wrap justify-center gap-5 p-5"></div></main></main>
+
+
+			
+			<script>
+				{
+					__sveltekit_lzln4 = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						env: {"PUBLIC_POCKETBASE":"localhost","PUBLIC_POCKETBASE_PORT":"8090","PUBLIC_ECHO":"localhost","PUBLIC_ECHO_PORT":"1323"}
+					};
+
+					const element = document.currentScript.parentElement;
+
+					const data = [null,null,null];
+
+					Promise.all([
+						import("../_app/immutable/entry/start.8f793ba0.js"),
+						import("../_app/immutable/entry/app.1306f8a3.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data,
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,1 @@
+new TextEncoder;function o({params:e}){return{title:e.slug,content:"Welcome to our blog. Lorem ipsum dolor sit amet..."}}const t=Object.freeze(Object.defineProperty({__proto__:null,load:o},Symbol.toStringTag,{value:"Module"}));export{t as _,o as l};
