@@ -15,7 +15,7 @@ chlorine_pump_topic = 'chlorine/pump'
 base_pump_topic = 'basic/punp'
 
 max_water_lvl = 450
-max_ph = 9
+max_ph = 4
 
 # Initialize the chlorine level and pH variables
 chlorine_lvl = 0
@@ -60,10 +60,11 @@ while True:
         client.publish(grit_pump, 'off')
     if chlorine_ph < max_ph:
         client.publish(base_pump_topic, 'on')
-        time.sleep(5)
+        time.sleep(2)
         client.publish(base_pump_topic, 'off')
     if chlorine_ph >= max_ph:
         client.publish(base_pump_topic, 'off')
+        client.publish(chlorine_pump_topic, 'on')
         subprocess.run(['python', 'dechlorine.py'])
         
 
