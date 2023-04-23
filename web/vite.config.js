@@ -2,7 +2,10 @@ import { sveltekit } from '@sveltejs/kit/vite';
 
 /** @type {import('vite').UserConfig} */
 const config = {
-	plugins: [sveltekit()]
+	plugins: [sveltekit()],
+	build: {
+		chunkSizeWarningLimit: 1600,
+	  },
 };
 
 export default config;
