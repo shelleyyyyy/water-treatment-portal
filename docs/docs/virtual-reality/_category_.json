@@ -1,0 +1,8 @@
+{
+  "label": "Virtual Reality",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "The virtual reality component of the project provides a simulated environment for training and visualization purposes."
+  }
+}

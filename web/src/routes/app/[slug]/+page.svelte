@@ -9,12 +9,18 @@
 	import SubCard from '$lib/app/SubCard.svelte';
 	import { pb } from '$lib/app/pocketbase.js';
 	import Graph from '$lib/app/Graph.svelte';
-	import Chart from '$lib/app/Chart.svelte';
-
+	import ChartModal from '$lib/app/ChartModal.svelte';
+	import HistChart from '$lib/app/HistChart.svelte';
+	import HistChartModal from '$lib/app/HistChartModal.svelte';
 	let records = [];
 	let sector = {};
 	let subs = [];
 	let isConnected = false;
+
+	const getTitle = async (id) => {
+		const record = await pb.collection('subsciptions').getOne(id);
+		console.log(record.title, "a;slkdjf;alskdj")
+	}
 
 	onMount(async () => {
 		try {
@@ -28,16 +34,16 @@
 
 		sector = await pb.collection('sectors').getOne(data.title);
 		var res = await pb.collection('devices').getFullList(200, {
-			expand: 'sector',
-			expane: 'subs'
+			expand: 'subs',
+			// expan: 'subs'
 		});
 
-		console.log(res);
+		console.log(res, "WOWO");
 
 		var forRecords = [];
 
 		res.forEach((element) => {
-			if (element.expand.sector.id == data.title) {
+			if (element.sector == data.title) {
 				forRecords.push(element);
 			}
 		});
@@ -52,6 +58,8 @@
 
 		// console.log(records)
 	});
+
+
 </script>
 
 <h1 class="text-xl font-bold p-5 px-10">{sector.title}</h1>
@@ -60,14 +68,6 @@
 		<div class="card bg-primary text-primary-content">
 			<div class="card-body">
 				<h2 class="card-title text-3xl">{r.title}</h2>
-				{#if r.subs.length > 0}
-					{#each r.subs as s}
-						<div class="card">
-							<!-- <Graph id={s} /> -->
-							<Chart id={s}/>
-						</div>
-					{/each}
-				{/if}
 
 				<p>{r.description}</p>
 				<div class="card-actions pt-5 justify-start grid gap-3 grid-cols-1">
@@ -83,11 +83,33 @@
 					{#if r.subs.length > 0}
 						<div class="font-bold text-center text-2xl">Subscriptions</div>
 						<div class="flex gap-1 flex-wrap">
-							{#each r.subs as s}
-								<SubCard id={s} />
+							{#each r.expand.subs as s}
+								<div class="bg-base-100 p-5 card grid gap-5">
+									<div>
+										<SubCard sub={s} />
+									</div>
+									{#if s.chart}
+										<div class="justify-center flex w-full">
+											<ChartModal sub={s}/>
+										</div>
+										<div class="justify-center flex">
+											<!-- <HistChart id={s.topic} title={s.id}/> -->
+											<HistChartModal sub={s}/>
+										</div>
+									{/if}
+								</div>
 							{/each}
 						</div>
 					{/if}
+
+					<!-- {#if r.subs.length > 0}
+						<div class="font-bold text-center text-2xl">Charts</div>
+						{#each r.expand.subs as s}
+							
+						{/each}
+					{/if} -->
+
+					
 				</div>
 			</div>
 		</div>

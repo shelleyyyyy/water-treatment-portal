@@ -1,0 +1,8 @@
+{
+  "label": "Web Management",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "The web portal for the project provides a centralized platform for managing and monitoring the different components of the water treatment test bed."
+  }
+}

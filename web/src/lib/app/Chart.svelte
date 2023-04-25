@@ -5,6 +5,7 @@
     import Chart from "chart.js";
     // export let title;
     export let id;
+    export let title;
     // import { connectSocket, sendMessage, listener } from '../../networking/socketSend';
 
     $: list = []
@@ -129,7 +130,7 @@
       <div class="flex flex-wrap items-center">
         <div class="relative w-full max-w-full flex-grow flex-1">
           <h6 class="uppercase text-blueGray-100 mb-1 text-xs font-semibold">
-            Temperature Data
+            Live {title}
           </h6>
           <h2 class="text-white text-xl font-semibold">
             <!-- {title} -->

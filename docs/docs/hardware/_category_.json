@@ -1,0 +1,8 @@
+{
+  "label": "Hardware",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "The hardware part of the project involves physical devices such as pumps, valves, and sensors that are controlled and monitored through the software layer."
+  }
+}
