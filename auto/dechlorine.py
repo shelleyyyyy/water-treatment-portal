@@ -1,6 +1,8 @@
 import paho.mqtt.client as mqtt
 import time
 import subprocess
+import topics
+
 
 broker_address = '192.168.1.179'
 broker_port = 1883
