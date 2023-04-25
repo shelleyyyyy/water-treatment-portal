@@ -12,3 +12,7 @@ services:
     build: ./pb/.
     ports:
       - 8090:8090
+  docs:
+    build: ./docs/.
+    ports:
+      - 3000:3000
