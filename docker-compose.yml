@@ -4,8 +4,8 @@ services:
     build: ./web/.
     ports:
       - 80:80
-  echo:
-    build: ./echo/.
+  client:
+    build: ./client/.
     ports:
       - 1323:1323
   pb:
