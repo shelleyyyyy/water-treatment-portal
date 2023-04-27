@@ -1,7 +1,7 @@
 import paho.mqtt.client as mqtt
 import time
 import subprocess
-import topics
+import topics as tp
 
 
 broker_address = '192.168.1.179'
@@ -10,11 +10,6 @@ broker_port = 1883
 # Previous topic
 grit_pump = 'grit/pump'
 
-# Chlorine topic
-chlorine_ph_topic = 'chlorine/ph'
-chlorine_lvl_topic = 'chlorine/level'
-chlorine_pump_topic = 'chlorine/pump'
-base_pump_topic = 'basic/punp'
 
 max_water_lvl = 450
 max_ph = 4
@@ -25,14 +20,14 @@ chlorine_ph = 0
 
 def on_connect(client, flags, rc):
     print("Connected with result code " + str(rc))
-    client.subscribe(chlorine_lvl_topic)
-    client.subscribe(chlorine_ph_topic)
+    client.subscribe(tp.chlorine_lvl_topic)
+    client.subscribe(tp.chlorine_ph_topic)
 
 def on_message(client, userdata, msg):
     global chlorine_lvl, chlorine_ph
-    if msg.topic == chlorine_lvl_topic:
+    if msg.topic == tp.chlorine_lvl_topic:
         chlorine_lvl = int(msg.payload.decode())
-    elif msg.topic == chlorine_ph_topic:
+    elif msg.topic == tp.chlorine_ph_topic:
         chlorine_ph = int(msg.payload.decode())
     print("Water level: " + str(chlorine_lvl))
     print('pH: ' + str(chlorine_ph))
@@ -61,12 +56,12 @@ while True:
     if chlorine_lvl >= max_water_lvl:
         client.publish(grit_pump, 'off')
     if chlorine_ph < max_ph:
-        client.publish(base_pump_topic, 'on')
+        client.publish(tp.base_pump_topic, 'on')
         time.sleep(2)
-        client.publish(base_pump_topic, 'off')
+        client.publish(tp.base_pump_topic, 'off')
     if chlorine_ph >= max_ph:
-        client.publish(base_pump_topic, 'off')
-        client.publish(chlorine_pump_topic, 'on')
+        client.publish(tp.base_pump_topic, 'off')
+        client.publish(tp.chlorine_pump_topic, 'on')
         subprocess.run(['python', 'dechlorine.py'])
         
 

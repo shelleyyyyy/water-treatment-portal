@@ -1,23 +1,18 @@
 import paho.mqtt.client as mqtt
 import subprocess
-import topics
+import topics as tp
 
 
 broker_address = '192.168.1.179'
 broker_port = 1883
 
-# Previous topic 
-outtake_topic = 'outtake/pump'
 
-# Grit topics
-grit_pump_topic = 'grit/pump'
-grit_lvl_topic = 'grit/level'
 
 max_water_lvl = 450
 
 def on_connect(client, flags, rc):
     print("Connected with result code " + str(rc))
-    client.subscribe(grit_lvl_topic)
+    client.subscribe(tp.grit_lvl_topic)
         
 def on_message(client, userdata, msg):
     global grit_lvl
@@ -40,14 +35,14 @@ client.loop_start()
 
 while True:
     if client.is_connected():
-        client.publish(outtake_topic, "on")
+        client.publish(tp.outtake_topic, "on")
     else:
         print("Disconnected from MQTT broker")
         break
     if grit_lvl > max_water_lvl:
         print("Max water level reached")
-        client.publish(outtake_topic, 'off')
-        client.publish(grit_pump_topic, 'on')
+        client.publish(tp.outtake_topic, 'off')
+        client.publish(tp.grit_pump_topic, 'on')
         subprocess.Popen(['python', 'chlorine.py'])
         
 client.loop_stop()
