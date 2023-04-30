@@ -6,8 +6,6 @@ broker_address = '192.168.1.179'
 broker_port = 1883
 
 
-# next pump to run
-intake_topic = 'primary/pump'
 
 max_water_lvl = 450
 min_temp = 60
@@ -57,9 +55,9 @@ while True:
     if quality_tmp >= min_temp:
         client.publish(tp.quality_tmp_topic, 'off')
         time.sleep(5)
-        client.publish(intake_topic, 'on')
+        client.publish(tp.intake_topic, 'on')
         time.sleep(30)
-        client.publish(intake_topic, 'off')
+        client.publish(tp.intake_topic, 'off')
 
 client.loop_stop()
         
