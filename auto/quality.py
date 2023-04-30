@@ -5,8 +5,6 @@ import topics as tp
 broker_address = '192.168.1.179'
 broker_port = 1883
 
-
-
 max_water_lvl = 450
 min_temp = 60
 max_temp = 90
@@ -14,11 +12,13 @@ max_temp = 90
 quality_tmp = 0
 quality_lvl = 0
 
+
 def on_connect(client, flags, rc):
     print("Connected with result code " + str(rc))
     client.subscribe(tp.quality_tmp_topic)
     client.subscribe(tp.quality_lvl_topic)
-    
+
+
 def on_message(client, userdata, msg):
     global quality_tmp, quality_lvl
     if msg.topic == tp.quality_tmp_topic:
@@ -27,7 +27,8 @@ def on_message(client, userdata, msg):
         quality_lvl = int(msg.payload.decode())
     print("Water level: " + str(quality_lvl))
     print('Temp: ' + str(quality_tmp))
-    
+
+
 client = mqtt.Client()
 
 # Assign the on_connect and on_message callback functions
@@ -43,7 +44,7 @@ client.loop_start()
 while True:
     if client.is_connected():
         client.publish(tp.dechlorine_pump_topic, 'on')
-        time.sleep(5)
+
     else:
         print("Disconnected from MQTT broker")
         break
@@ -51,13 +52,12 @@ while True:
         client.publish(tp.dechlorine_pump_topic, 'off')
     if quality_tmp < min_temp:
         client.publish(tp.quality_tmp_topic, 'on')
-        time.sleep(5)
+
     if quality_tmp >= min_temp:
         client.publish(tp.quality_tmp_topic, 'off')
-        time.sleep(5)
+        time.sleep(1)
         client.publish(tp.intake_topic, 'on')
-        time.sleep(30)
+        time.sleep(1)
         client.publish(tp.intake_topic, 'off')
 
 client.loop_stop()
-        

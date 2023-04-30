@@ -2,24 +2,30 @@ import paho.mqtt.client as mqtt
 import time
 import subprocess
 import topics as tp
+import time
+import threading
 
 subprocess_list = []
+starttime = time.time()
 broker_address = '192.168.1.179'
 broker_port = 1883
 
 max_water_lvl = 450
 
-# Define the on_connect callback function
+
 def on_connect(client, flags, rc):
     print("Connected with result code " + str(rc))
     client.subscribe(tp.water_lvl_topic)
 
-# Define the on_message callback function
+
 def on_message(client, userdata, msg):
     water_level = int(msg.payload.decode())
     print("Water level: " + str(water_level))
 
+
+
 # Define the function to start the MQTT subscriber
+
 def start_mqtt_subscriber():
     # Create an MQTT client instance
     client = mqtt.Client()
@@ -38,17 +44,25 @@ def start_mqtt_subscriber():
     client.publish(tp.intake_topic, "on")
     print("Intake pump started")
 
+    # Define a function to run the scraper in a separate thread
+    def run_scraper():
+        while True:
+            if client.is_connected():
+                client.publish(tp.scraper_topic, "left")
+              
+                #client.publish(tp.scraper_topic, "right")
+            else:
+                print("Disconnected from MQTT broker")
+                break
+
+    # Start the scraper in a separate thread
+    scraper_thread = threading.Thread(target=run_scraper)
+    scraper_thread.start()
+
     # Wait until max water level is reached
     while True:
         if client.is_connected():
-            client.publish(tp.intake_topic, "on")
-            client.publish(tp.scraper_topic, "left")
-            time.sleep(10)
-            client.publish(tp.scraper_topic, "right")
-            time.sleep(10)
-            client.publish(tp.outtake_topic, "off")
-            time.sleep(1)
-
+        
             # Update the water level variable
             water_level = int(client.subscribe(tp.water_lvl_topic))
 
@@ -61,17 +75,17 @@ def start_mqtt_subscriber():
             client.publish(tp.intake_topic, "off")
             client.publish(tp.scraper_topic, "right")
             client.publish(tp.outtake_topic, "on")
-            p = subprocess.Popen(["python", "grit.py"])
-            subprocess_list.append(p)
             
+            def run_grit():
+                p = subprocess.Popen(["python", "grit.py"])
+                subprocess_list.append(p)
+            
+            grit_thread = threading.Thread(target=run_grit)
+            grit_thread.start()
+            grit_thread.join()
+
             break
 
     client.loop_stop()
-
-def stop_scripts():
-    global subprocess_list
-    for p in subprocess_list:
-        p.terminate()
-    subprocess_list = []
 
 

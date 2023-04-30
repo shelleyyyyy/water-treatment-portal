@@ -1,14 +1,14 @@
 from fastapi import FastAPI
 import primary
 from primary import subprocess_list, start_mqtt_subscriber
-app = FastAPI(timout=600)
+app = FastAPI()
 
 # Get the start time of the script
 
 
 @app.get('/scripts/starttime')
 async def get_start_time():
-    start_time = ...  # Get the start time here
+    start_time = primary.starttime
     return {'start_time': start_time}
 
 # Get the start automation
@@ -16,7 +16,7 @@ async def get_start_time():
 
 @app.get('/scripts/start')
 async def get_start_script():
-    primary.start_mqtt_subscriber()
+    start_mqtt_subscriber()
     return {'message': "Script started"}
 
 # Get the stop automation
@@ -36,5 +36,6 @@ async def get_stop_script():
 
 @app.get('/scripts/isrunning')
 async def is_running():
-    is_running = ...  # Check if the script is running here
+    global subprocess_list
+    is_running = True if subprocess_list else False
     return {'is_running': is_running}

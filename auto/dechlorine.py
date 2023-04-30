@@ -1,9 +1,11 @@
 import paho.mqtt.client as mqtt
 import time
 import subprocess
+import threading
+import primary
 import topics as tp
 
-
+subprocess_list = primary.subprocess_list
 broker_address = '192.168.1.179'
 broker_port = 1883
 
@@ -15,10 +17,12 @@ max_ph = 9
 dechlorine_lvl = 0
 dechlorine_ph = 0
 
+
 def on_connect(client, flags, rc):
     print("Connected with result code " + str(rc))
     client.subscribe(tp.dechlorine_ph_topic)
     client.subscribe(tp.dechlorine_lvl_topic)
+
 
 def on_message(client, userdata, msg):
     global dechlorine_lvl, dechlorine_ph
@@ -28,7 +32,8 @@ def on_message(client, userdata, msg):
         dechlorine_ph = int(msg.payload.decode())
     print("Water level: " + str(dechlorine_lvl))
     print('pH: ' + str(dechlorine_ph))
-        
+
+
 # Create an MQTT client instance
 client = mqtt.Client()
 
@@ -45,7 +50,7 @@ client.loop_start()
 while True:
     if client.is_connected():
         client.publish(tp.chlorine_pump_topic, 'on')
-        time.sleep(5)
+
     else:
         print("Disconnected from MQTT broker")
         break
@@ -53,15 +58,21 @@ while True:
         client.publish(tp.chlorine_pump_topic, 'off')
     if dechlorine_ph > max_ph:
         client.publish(tp.acid_pump_topic, 'on')
-        time.sleep(2)
+
     if dechlorine_ph <= max_ph:
         client.publish(tp.acid_pump_topic, 'off')
         client.publish(tp.agitator_topic, 'on')
-        time.sleep(10)
+        # time.sleep(1)
         client.publish(tp.agitator_topic, 'off')
         client.publish(tp.dechlorine_pump_topic, 'on')
-        subprocess.Popen(['python', 'quality.py'])
+
+        def run_quality():
+            p = subprocess.Popen(['python', 'quality.py'])
+            subprocess_list.append(p)
+
+        quality_thread = threading.Thread(target=run_quality)
+        quality_thread.start()
+        quality_thread.join()
+
 
 client.loop_stop()
-        
-
