@@ -145,5 +145,3 @@
       </div>
     </div>
   </div>
-
-  <!-- <button on:click={updateData}>click me</button> -->

@@ -1,0 +1,11 @@
+{
+    "broker": "192.168.1.179",
+    "collectionId": "8nqq7xcva10b3ey",
+    "collectionName": "global",
+    "created": "2023-04-26 02:58:09.797Z",
+    "id": "r1en4aa61ndcg6y",
+    "password": "blah",
+    "port": "1883",
+    "updated": "2023-04-27 05:08:23.439Z",
+    "username": "blah"
+}

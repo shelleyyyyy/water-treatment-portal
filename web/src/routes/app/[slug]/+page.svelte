@@ -8,10 +8,10 @@
 	import Control from '$lib/app/Control.svelte';
 	import SubCard from '$lib/app/SubCard.svelte';
 	import { pb } from '$lib/app/pocketbase.js';
-	import Graph from '$lib/app/Graph.svelte';
 	import ChartModal from '$lib/app/ChartModal.svelte';
 	import HistChart from '$lib/app/HistChart.svelte';
 	import HistChartModal from '$lib/app/HistChartModal.svelte';
+	import CallHistChar from '$lib/app/CallHistChar.svelte';
 	let records = [];
 	let sector = {};
 	let subs = [];
@@ -35,28 +35,12 @@
 		sector = await pb.collection('sectors').getOne(data.title);
 		var res = await pb.collection('devices').getFullList(200, {
 			expand: 'subs',
-			// expan: 'subs'
+			filter: `sector="${data.title}"`
 		});
 
-		console.log(res, "WOWO");
+		console.log(res)
 
-		var forRecords = [];
-
-		res.forEach((element) => {
-			if (element.sector == data.title) {
-				forRecords.push(element);
-			}
-		});
-
-		records = forRecords;
-
-		// var resSubs = await pb.collection('subsciptions').getFullList(200, {
-		//     expand: 'device'
-		// })
-
-		// console.log(resSubs)
-
-		// console.log(records)
+		records = res;
 	});
 
 
@@ -80,7 +64,7 @@
 						</div>
 					{/if}
 
-					{#if r.subs.length > 0}
+					{#if r.expand.subs.length > 0}
 						<div class="font-bold text-center text-2xl">Subscriptions</div>
 						<div class="flex gap-1 flex-wrap">
 							{#each r.expand.subs as s}
@@ -94,7 +78,8 @@
 										</div>
 										<div class="justify-center flex">
 											<!-- <HistChart id={s.topic} title={s.id}/> -->
-											<HistChartModal sub={s}/>
+											<!-- <HistChartModal sub={s}/> -->
+											<CallHistChar sub={s}/>
 										</div>
 									{/if}
 								</div>

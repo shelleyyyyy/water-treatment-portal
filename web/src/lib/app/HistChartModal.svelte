@@ -1,8 +1,10 @@
 <script>
+// @ts-nocheck
+
     import { onMount } from 'svelte'
     import { pb } from '$lib/app/pocketbase.js'
 	import HistChart from './HistChart.svelte';
-    export let sub;
+     export let sub;
 
     // let title = ""
     // let chart = false
@@ -26,7 +28,7 @@
     <input type="checkbox" id={sub.id + "h"} class="modal-toggle" />
     <div class="modal">
     <div class="card p-5 bg-base-100">
-        <HistChart id={sub.id} title={sub.title} />
+        <HistChart id={sub.id + "hist"} title={sub.title} topic={sub.topic}/>
         <div class="modal-action">
             <label for={sub.id + "h"} class="btn w-full">Close</label>
         </div>

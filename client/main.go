@@ -16,10 +16,11 @@ import (
 )
 
 type BrokerConfig struct {
-	Broker string
-	Port   string
-	Pass   string
-	User   string
+	Broker   string
+	Port     string
+	Pass     string
+	User     string
+	ClientID string
 }
 
 type ResponseData struct {
@@ -54,10 +55,11 @@ func main() {
 	}
 
 	brokerConf := BrokerConfig{
-		Broker: os.Getenv("BROKER"),
-		Port:   os.Getenv("BROKER_PORT"),
-		Pass:   os.Getenv("BROKER_PASS"),
-		User:   os.Getenv("BROKER_USER"),
+		Broker:   os.Getenv("BROKER"),
+		Port:     os.Getenv("BROKER_PORT"),
+		Pass:     os.Getenv("BROKER_PASS"),
+		User:     os.Getenv("BROKER_USER"),
+		ClientID: os.Getenv("MQTT_CLIENT_ID"),
 	}
 
 	pb := Pocket{
@@ -68,7 +70,7 @@ func main() {
 	}
 
 	for i := 0; i < 10; i++ {
-		fmt.Println("Connecting")
+		fmt.Println("Connecting to Pocketbase...")
 		err := pb.Auth()
 
 		if err != nil {
@@ -79,6 +81,8 @@ func main() {
 
 		time.Sleep(5 * time.Second)
 	}
+
+	fmt.Println("Connected to Pocketbase!")
 
 	res, err := pb.GetList("subsciptions")
 
@@ -97,14 +101,13 @@ func main() {
 
 	// MQTT Handlers
 	var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
-		fmt.Printf("Received message: %s from topic: %s\n", msg.Payload(), msg.Topic())
+		// fmt.Printf("Received message: %s from topic: %s\n", msg.Payload(), msg.Topic())
 
 		var i Item
 
 		for _, s := range subs.Items {
 			if s.Topic == msg.Topic() {
 				i = s
-				fmt.Println(s)
 
 				clone := s
 				clone.Value = string(msg.Payload())
@@ -126,8 +129,8 @@ func main() {
 				Value: string(msg.Payload()),
 			}
 
-			fmt.Println("REACHING THIS")
-			fmt.Println(hist)
+			// fmt.Println("REACHING THIS")
+			// fmt.Println(hist)
 
 			jsonData, err := json.Marshal(hist)
 
@@ -140,16 +143,20 @@ func main() {
 	}
 
 	var connectHandler mqtt.OnConnectHandler = func(client mqtt.Client) {
-		fmt.Println("Connected")
+		fmt.Println("Connected to mqtt Broker!")
 	}
 
 	var connectLostHandler mqtt.ConnectionLostHandler = func(client mqtt.Client, err error) {
 		fmt.Printf("Connect lost: %v", err)
+
+		if token := client.Connect(); token.Wait() && token.Error() != nil {
+			panic(token.Error())
+		}
 	}
 
 	opts := mqtt.NewClientOptions()
 	opts.AddBroker(fmt.Sprintf("tcp://%s:%s", brokerConf.Broker, brokerConf.Port))
-	opts.SetClientID("go_mqtt_client")
+	opts.SetClientID(brokerConf.ClientID)
 	opts.SetUsername(brokerConf.User)
 	opts.SetPassword(brokerConf.Pass)
 	opts.SetDefaultPublishHandler(messagePubHandler)
@@ -160,10 +167,7 @@ func main() {
 		panic(token.Error())
 	}
 
-	for _, s := range subs.Items {
-		mqttSub(client, s)
-
-	}
+	status := "off"
 
 	e := echo.New()
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
@@ -182,7 +186,58 @@ func main() {
 
 		mqttPub(client, u.Topic, u.Message)
 
-		return c.JSON(http.StatusCreated, "success")
+		return c.JSON(http.StatusCreated, "success: "+status)
+	})
+	e.GET("/start", func(c echo.Context) error {
+
+		status = "run"
+
+		for _, s := range subs.Items {
+			mqttSub(client, s)
+		}
+
+		return c.JSON(http.StatusFound, "Starting Experiment... Status: "+status)
+
+	})
+	e.GET("/kill", func(c echo.Context) error {
+
+		status = "off"
+
+		err = pb.RemoveCollection("historical")
+		if err != nil {
+			return c.JSON(http.StatusNotFound, "IDK SOMETHING HEPPEND")
+		}
+
+		for _, s := range subs.Items {
+			client.Unsubscribe(s.Topic)
+		}
+
+		return c.JSON(http.StatusFound, "Destroying Experiment..., Status: "+status)
+
+	})
+	e.GET("/pause", func(c echo.Context) error {
+
+		status = "pause"
+
+		for _, s := range subs.Items {
+			client.Unsubscribe(s.Topic)
+		}
+
+		status = "pause"
+
+		return c.JSON(http.StatusFound, "Pausing Experiment..., Status: "+status)
+
+	})
+	e.GET("/status", func(c echo.Context) error {
+
+		type Status struct {
+			Status string `json:"status"`
+		}
+
+		s := Status{status}
+
+		return c.JSON(http.StatusFound, s)
+
 	})
 	e.Logger.Fatal(e.Start(":1323"))
 }

@@ -1,39 +1,27 @@
 <script>
     import { onMount } from "svelte";
     import { pb } from '$lib/app/pocketbase.js'
-    // library that creates chart objects in page
     import Chart from "chart.js";
-    // export let title;
-    export let id;
-    export let title;
-    // import { connectSocket, sendMessage, listener } from '../../networking/socketSend';
+
+    export let id
+    export let data
 
     $: list = [1, 2, 3, 4, 5, 6]
 
-    // init chart
     onMount(async () => {
 
       console.log(id, "CHART ID************")
 
-      await pb.collection('historical').getFullList(200 /* batch size */, {
-          filter: 'topic = "/sim/tmp"',
-      })
-      .then((e) => {
-        console.log("EVENT", e)
-
-        list = e.map(obj => obj.value)
-      })
-
-      var config = {
+        var config = {
         type: "line",
         data: {
-          labels: list,
+          labels: data,
           datasets: [
             {
               label: 'Live',
               backgroundColor: 'red',
               borderColor: 'red',
-              data: list,
+              data: data,
               fill: false,
               barThickness: 8
             }
@@ -110,16 +98,10 @@
           },
         },
       };
+      // @ts-ignore
       var ctx = document.getElementById(id).getContext("2d");
+      // @ts-ignore
       var myLine = new Chart(ctx, config);
-      const updateData = () => {
-        list.push(10)
-        myLine.update()
-
-           
-      };
-
-
     });
 
   </script>
@@ -132,7 +114,8 @@
       <div class="flex flex-wrap items-center">
         <div class="relative w-full max-w-full flex-grow flex-1">
           <h6 class="uppercase text-blueGray-100 mb-1 text-xs font-semibold">
-            Historical {title}
+            <!-- Historical {title} -->
+            joe is gay
           </h6>
           <h2 class="text-white text-xl font-semibold">
             <!-- {title} -->

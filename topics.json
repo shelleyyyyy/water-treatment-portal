@@ -1,0 +1,206 @@
+{
+    "page": 1,
+    "perPage": 30,
+    "totalItems": 22,
+    "totalPages": 1,
+    "items": [
+        {
+            "collectionId": "3wp53y50oflml0z",
+            "collectionName": "topics",
+            "created": "2023-04-27 04:00:47.000Z",
+            "id": "grit_tds_000000",
+            "node": "Grit Chamber TDS Sensor",
+            "topic": "grit/grit/tds",
+            "updated": "2023-04-27 06:23:53.314Z"
+        },
+        {
+            "collectionId": "3wp53y50oflml0z",
+            "collectionName": "topics",
+            "created": "2023-04-27 04:01:49.424Z",
+            "id": "grit_level_0000",
+            "node": "Grit Chamber Water Level Sensor",
+            "topic": "vmi/grit/level",
+            "updated": "2023-04-27 07:23:15.910Z"
+        },
+        {
+            "collectionId": "3wp53y50oflml0z",
+            "collectionName": "topics",
+            "created": "2023-04-27 04:02:11.034Z",
+            "id": "grit_pump_00000",
+            "node": "Grit Chamber Pump",
+            "topic": "vmi/grit/pump",
+            "updated": "2023-04-27 06:20:48.353Z"
+        },
+        {
+            "collectionId": "3wp53y50oflml0z",
+            "collectionName": "topics",
+            "created": "2023-04-27 07:34:50.829Z",
+            "id": "primary_pump_00",
+            "node": "Primary Intake Pump (From Exterior Water Source)",
+            "topic": "primary/pump1",
+            "updated": "2023-04-27 08:15:03.201Z"
+        },
+        {
+            "collectionId": "3wp53y50oflml0z",
+            "collectionName": "topics",
+            "created": "2023-04-27 08:10:09.438Z",
+            "id": "primary_level_0",
+            "node": "Primary Intake Water Level Sensor",
+            "topic": "vmi/primary/level",
+            "updated": "2023-04-27 08:46:46.340Z"
+        },
+        {
+            "collectionId": "3wp53y50oflml0z",
+            "collectionName": "topics",
+            "created": "2023-04-27 08:10:56.076Z",
+            "id": "primary_scraper",
+            "node": "Primary Intake Scraper",
+            "topic": "primary/scaper",
+            "updated": "2023-04-27 08:11:18.909Z"
+        },
+        {
+            "collectionId": "3wp53y50oflml0z",
+            "collectionName": "topics",
+            "created": "2023-04-27 08:15:25.163Z",
+            "id": "primary_pump_01",
+            "node": "Primary Intake Pump",
+            "topic": "primary/pump3",
+            "updated": "2023-04-27 08:46:38.416Z"
+        },
+        {
+            "collectionId": "3wp53y50oflml0z",
+            "collectionName": "topics",
+            "created": "2023-04-27 08:53:58.488Z",
+            "id": "quality_temp_00",
+            "node": "Quality Monitoring Temperature Sensor",
+            "topic": "quality/temp",
+            "updated": "2023-04-27 08:53:58.488Z"
+        },
+        {
+            "collectionId": "3wp53y50oflml0z",
+            "collectionName": "topics",
+            "created": "2023-04-27 09:00:26.819Z",
+            "id": "quality_level_0",
+            "node": "Quality Monitoring Water Level Sensor",
+            "topic": "quality/level",
+            "updated": "2023-04-27 09:02:17.866Z"
+        },
+        {
+            "collectionId": "3wp53y50oflml0z",
+            "collectionName": "topics",
+            "created": "2023-04-27 09:04:26.344Z",
+            "id": "quality_heater_",
+            "node": "Quality Monitoring Heater",
+            "topic": "quality/heater",
+            "updated": "2023-04-27 09:04:26.344Z"
+        },
+        {
+            "collectionId": "3wp53y50oflml0z",
+            "collectionName": "topics",
+            "created": "2023-04-27 09:22:32.229Z",
+            "id": "quality_pump_00",
+            "node": "Quality Monitoring Pump",
+            "topic": "quality/pump",
+            "updated": "2023-04-27 09:22:32.229Z"
+        },
+        {
+            "collectionId": "3wp53y50oflml0z",
+            "collectionName": "topics",
+            "created": "2023-04-27 09:26:31.222Z",
+            "id": "quality_bubbler",
+            "node": "Quality Monitoring Bubbler",
+            "topic": "quality/bubbler",
+            "updated": "2023-04-27 09:26:31.222Z"
+        },
+        {
+            "collectionId": "3wp53y50oflml0z",
+            "collectionName": "topics",
+            "created": "2023-04-27 09:27:45.491Z",
+            "id": "chlorine_mixer_",
+            "node": "Chlorine Chamber Mixer",
+            "topic": "chlorine/mixer",
+            "updated": "2023-04-27 09:27:45.491Z"
+        },
+        {
+            "collectionId": "3wp53y50oflml0z",
+            "collectionName": "topics",
+            "created": "2023-04-27 09:29:25.683Z",
+            "id": "dechlorineMixer",
+            "node": "Dechlorination Chamber mixer",
+            "topic": "dechlorine/mixer",
+            "updated": "2023-04-27 09:29:25.683Z"
+        },
+        {
+            "collectionId": "3wp53y50oflml0z",
+            "collectionName": "topics",
+            "created": "2023-04-27 23:40:22.176Z",
+            "id": "chlorine_pump_0",
+            "node": "Chlorine Chamber pump",
+            "topic": "chlorine/pump",
+            "updated": "2023-04-27 23:40:22.176Z"
+        },
+        {
+            "collectionId": "3wp53y50oflml0z",
+            "collectionName": "topics",
+            "created": "2023-04-27 23:40:33.579Z",
+            "id": "chlorine_level_",
+            "node": "Chlorine Chamber Water Level Sensor",
+            "topic": "chlorine/level1",
+            "updated": "2023-04-28 02:58:06.406Z"
+        },
+        {
+            "collectionId": "3wp53y50oflml0z",
+            "collectionName": "topics",
+            "created": "2023-04-27 23:41:22.372Z",
+            "id": "chlorine_ph_000",
+            "node": "Chlorine Chamber pH sensor",
+            "topic": "chlorine/ph",
+            "updated": "2023-04-27 23:41:22.372Z"
+        },
+        {
+            "collectionId": "3wp53y50oflml0z",
+            "collectionName": "topics",
+            "created": "2023-04-28 13:26:26.554Z",
+            "id": "dechlorine_ph_0",
+            "node": "",
+            "topic": "",
+            "updated": "2023-04-28 13:26:26.554Z"
+        },
+        {
+            "collectionId": "3wp53y50oflml0z",
+            "collectionName": "topics",
+            "created": "2023-04-28 13:26:41.055Z",
+            "id": "dechlorineLevel",
+            "node": "",
+            "topic": "",
+            "updated": "2023-04-28 13:26:41.055Z"
+        },
+        {
+            "collectionId": "3wp53y50oflml0z",
+            "collectionName": "topics",
+            "created": "2023-04-28 13:27:11.803Z",
+            "id": "deChlorine_pump",
+            "node": "",
+            "topic": "",
+            "updated": "2023-04-28 13:27:11.803Z"
+        },
+        {
+            "collectionId": "3wp53y50oflml0z",
+            "collectionName": "topics",
+            "created": "2023-04-28 13:27:45.516Z",
+            "id": "acid_pump_00000",
+            "node": "",
+            "topic": "",
+            "updated": "2023-04-28 13:27:45.516Z"
+        },
+        {
+            "collectionId": "3wp53y50oflml0z",
+            "collectionName": "topics",
+            "created": "2023-04-28 13:27:54.359Z",
+            "id": "basic_pump_0000",
+            "node": "",
+            "topic": "",
+            "updated": "2023-04-28 13:27:54.359Z"
+        }
+    ]
+}

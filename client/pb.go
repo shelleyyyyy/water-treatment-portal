@@ -33,6 +33,10 @@ type authRes struct {
 	Token string `json:"token"`
 }
 
+type Record struct {
+	Id string `json:"id"`
+}
+
 func (p Pocket) Testing() {
 	fmt.Println("hello")
 }
@@ -92,7 +96,6 @@ func (p Pocket) Auth() error {
 	p.Token = ares.Token
 
 	return nil
-
 }
 
 func (p Pocket) GetList(collection string) ([]byte, error) {
@@ -153,8 +156,6 @@ func (p Pocket) Update(recordID string, collection string, payload []byte) error
 	}
 	defer response.Body.Close()
 
-	fmt.Println("response Status:", response.Status)
-
 	return nil
 }
 
@@ -162,7 +163,6 @@ func (p Pocket) Create(collection string, payload []byte) error {
 
 	posturl := fmt.Sprintf("http://%s:%s/api/collections/%s/records", p.Pocketbase, p.PocketbasePort, collection)
 	// Create a new HTTP client
-	fmt.Println(posturl)
 	client := &http.Client{}
 
 	// Create a new HTTP request with a POST method and the API endpoint
@@ -181,8 +181,64 @@ func (p Pocket) Create(collection string, payload []byte) error {
 		fmt.Println(err)
 		return err
 	}
-	fmt.Println(resp)
 	defer resp.Body.Close()
+
+	return nil
+}
+
+func (p Pocket) Delete(collection string, recordID string) error {
+	httpposturl := fmt.Sprintf("http://%s:%s/api/collections/%s/records/%s", p.Pocketbase, p.PocketbasePort, collection, recordID)
+
+	request, err := http.NewRequest("DELETE", httpposturl, nil)
+
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	request.Header.Set("Content-Type", "application/json; charset=UTF-8")
+
+	client := &http.Client{}
+	response, err := client.Do(request)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	defer response.Body.Close()
+
+	return nil
+}
+
+func (p Pocket) RemoveCollection(collection string) error {
+
+	type Response struct {
+		Items []Record `json:"items"`
+	}
+
+	for true {
+		res, err := p.GetList(collection)
+		if err != nil {
+			fmt.Println("GetList error: ", err)
+			return err
+		}
+
+		var list Response
+
+		err = json.Unmarshal([]byte(res), &list)
+		if err != nil {
+			fmt.Println("Json Unmarshal: ", err)
+			return err
+		}
+
+		for _, i := range list.Items {
+			p.Delete(collection, i.Id)
+		}
+
+		if len(list.Items) < 30 {
+			return nil
+		}
+	}
 
 	return nil
 }
