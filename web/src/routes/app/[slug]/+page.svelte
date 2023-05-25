@@ -12,6 +12,7 @@
 	import HistChart from '$lib/app/HistChart.svelte';
 	import HistChartModal from '$lib/app/HistChartModal.svelte';
 	import CallHistChar from '$lib/app/CallHistChar.svelte';
+	import HistTable from '$lib/app/HistTable.svelte';
 	let records = [];
 	let sector = {};
 	let subs = [];
@@ -79,7 +80,8 @@
 										<div class="justify-center flex">
 											<!-- <HistChart id={s.topic} title={s.id}/> -->
 											<!-- <HistChartModal sub={s}/> -->
-											<CallHistChar sub={s}/>
+											<!-- <CallHistChar sub={s}/> -->
+											<HistTable sub={s}/>
 										</div>
 									{/if}
 								</div>
