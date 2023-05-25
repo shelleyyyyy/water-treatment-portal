@@ -167,7 +167,11 @@ func main() {
 		panic(token.Error())
 	}
 
-	status := "off"
+	for _, s := range subs.Items {
+		mqttSub(client, s)
+	}
+
+	status := "on"
 
 	e := echo.New()
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{

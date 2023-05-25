@@ -48,7 +48,7 @@
     <div class="navbar-start">
       <a href="/app" class="btn btn-ghost normal-case text-xl">Water Treatment Portal</a>
     </div>
-    <div class="navbar-end gap-3">
+    <!-- <div class="navbar-end gap-3">
       Experiment Status: {status}
       {#if status === "off" || status === "pause"}
         <button on:click={handleStart} class="btn btn-success btn-outline">Start</button>
@@ -58,7 +58,7 @@
 
       {/if}
       <button on:click={logout} class="btn">Logout</button>
-    </div>
+    </div> -->
   </div>
 
 <main>
