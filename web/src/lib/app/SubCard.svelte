@@ -4,7 +4,6 @@
 	import ChartModal from './Chart.svelte';
 
 	export let sub;
-	console.log("What I am looking for", sub)
 
 	$: record = 'tmp';
 
@@ -29,7 +28,7 @@
 		{sub.title}
 	</div>
 	<div class="text-center p-3">
-		{sub.value}
+		{record}
 	</div>
 </div>
 

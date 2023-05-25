@@ -74,9 +74,9 @@
 										<SubCard sub={s} />
 									</div>
 									{#if s.chart}
-										<!-- <div class="justify-center flex w-full">
+										<div class="justify-center flex w-full">
 											<ChartModal sub={s}/>
-										</div> -->
+										</div>
 										<div class="justify-center flex">
 											<!-- <HistChart id={s.topic} title={s.id}/> -->
 											<!-- <HistChartModal sub={s}/> -->
